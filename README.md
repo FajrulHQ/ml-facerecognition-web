@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Docker
 
+### Option 1: Nginx (default)
+
 Build an optimized production bundle and serve it from Nginx with:
 
 ```bash
@@ -17,6 +19,22 @@ docker run --rm -p 3000:80 ml-facerecognition-web
 ```
 
 If you host the backend elsewhere, adjust the `--build-arg` value to point at the correct API endpoint before building the image so the React bundle is compiled with the right environment variable.
+
+### Option 2: Node + `serve` (no Nginx)
+
+If you prefer to serve the static bundle without Nginx, use `Dockerfile.node`, which relies on the `serve` CLI:
+
+```bash
+docker build \
+  -f Dockerfile.node \
+  -t ml-facerecognition-web-node:latest \
+  --build-arg REACT_APP_RECOGNITION_API_URL=http://localhost:8080/api/v1/recognition/check \
+  .
+
+docker run --rm -p 3000:80 ml-facerecognition-web-node:latest
+```
+
+This variant keeps everything inside a Node image, which can simplify setups where you want a single runtime or plan to extend the container with Node-based tooling.
 
 ## Available Scripts
 

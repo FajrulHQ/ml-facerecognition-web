@@ -1,6 +1,5 @@
 FROM node:20-alpine AS builder
 
-# Install dependencies and build the React app
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -8,13 +7,12 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:1.27-alpine AS runner
+FROM node:20-alpine AS runner
 
-# Copy custom nginx configuration (supports client-side routing)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /srv/app
+RUN npm install -g serve
 
-# Copy the compiled React build output
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /app/build ./build
 
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "build", "-l", "80"]
