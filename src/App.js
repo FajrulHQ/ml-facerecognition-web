@@ -11,6 +11,11 @@ const statusClasses = (code) =>
     ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
     : 'border-sky-500 bg-sky-500/10 text-sky-300'
 
+const boxOutlineClasses = (code) =>
+  code === 200
+    ? 'border-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.45)]'
+    : 'border-sky-400 shadow-[0_0_25px_rgba(125,211,252,0.35)]'
+
 function App() {
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
@@ -203,8 +208,14 @@ function App() {
     setIsScanning((prev) => !prev)
   }
 
+  useEffect(() => {
+    if (!isScanning) {
+      setMatches([])
+    }
+  }, [isScanning])
+
   const boxes = useMemo(() => {
-    if (!videoSize.width || !videoSize.height) return []
+    if (!isScanning || !videoSize.width || !videoSize.height) return []
 
     return matches
       .map((match) => {
@@ -228,7 +239,7 @@ function App() {
         }
       })
       .filter(Boolean)
-  }, [matches, videoSize.height, videoSize.width])
+  }, [isScanning, matches, videoSize.height, videoSize.width])
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -257,17 +268,23 @@ function App() {
                 muted
               />
               <div className="pointer-events-none absolute inset-0">
-                {boxes.map((box) => (
-                  <div
-                    key={box.id}
-                    className={`absolute rounded-xl border-2 p-2 text-xs font-semibold ${statusClasses(
-                      box.status_code
-                    )}`}
-                    style={box.style}
-                  >
-                    <p>{box.label || 'Unknown'}</p>
-                  </div>
-                ))}
+                {isScanning &&
+                  boxes.map((box) => (
+                    <div key={box.id} className="absolute" style={box.style}>
+                      <div
+                        className={`absolute -top-7 left-0 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide ${statusClasses(
+                          box.status_code
+                        )}`}
+                      >
+                        {box.label || 'Unknown'}
+                      </div>
+                      <div
+                        className={`h-full w-full rounded-xl border-2 ${boxOutlineClasses(
+                          box.status_code
+                        )}`}
+                      />
+                    </div>
+                  ))}
               </div>
               {!streamReady && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/80 text-sm text-slate-300">
