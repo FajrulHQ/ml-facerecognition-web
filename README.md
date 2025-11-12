@@ -2,6 +2,22 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Docker
+
+Build an optimized production bundle and serve it from Nginx with:
+
+```bash
+docker build -t ml-facerecognition-web .
+```
+
+Run the container (mapping port 80 inside the container to 3000 on the host):
+
+```bash
+docker run --rm -p 3000:80 ml-facerecognition-web
+```
+
+If you host the backend elsewhere, adjust the `--build-arg` value to point at the correct API endpoint before building the image so the React bundle is compiled with the right environment variable.
+
 ## Available Scripts
 
 In the project directory, you can run:
