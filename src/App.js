@@ -286,7 +286,7 @@ function App() {
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
                 onClick={toggleScanning}
-                disabled={!streamReady || !API_URL}
+                // disabled={!streamReady || !API_URL}
                 className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-lg transition disabled:cursor-not-allowed disabled:bg-slate-600 ${
                   isScanning ? 'bg-rose-500 hover:bg-rose-400' : 'bg-blue-500 hover:bg-blue-400'
                 }`}
