@@ -15,7 +15,7 @@ docker build -t ml-facerecognition-web .
 Run the container (mapping port 80 inside the container to 3000 on the host):
 
 ```bash
-docker run --rm -p 3000:80 ml-facerecognition-web
+docker run --rm -p 3000:3000 ml-facerecognition-web
 ```
 
 If you host the backend elsewhere, adjust the `--build-arg` value to point at the correct API endpoint before building the image so the React bundle is compiled with the right environment variable.
