@@ -192,7 +192,7 @@ function App() {
 
   const toggleScanning = () => {
     if (!API_URL) {
-      setFeedback('Missing VITE_RECOGNITION_API_URL in your .env file.')
+      setFeedback('Missing REACT_APP_RECOGNITION_API_URL in your .env file.')
       return
     }
     if (!streamReady) {
